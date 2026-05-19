@@ -1,11 +1,38 @@
 import React, { useState } from 'react';
 import { View, Text, Button, TextInput } from 'react-native';
 
+import { collection, addDoc } from 'firebase/firestore';
+
+import { db } from '../firebase/firebaseConfig';
+
 export default function AddExpense({ navigation }) {
 
   const [valor, setValor] = useState('');
   const [pagamento, setPagamento] = useState('');
   const [data, setData] = useState('');
+
+  async function salvarGasto() {
+
+    try {
+
+      await addDoc(collection(db, 'expenses'), {
+        valor,
+        pagamento,
+        data
+      });
+
+      console.log('Salvo com sucesso');
+
+      navigation.goBack();
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  }
+
 
   return (
     <View style={{
@@ -41,9 +68,9 @@ export default function AddExpense({ navigation }) {
 
       <Button
         title="Salvar"
-        onPress={() => console.log(valor, pagamento, data)}
+        onPress={salvarGasto}
       />
-
+      
       <View style={{marginTop:20}}>
         <Button
           title="Voltar"
@@ -53,6 +80,17 @@ export default function AddExpense({ navigation }) {
 
     </View>
   );
+}
+
+async function salvarGasto() {
+
+  await addDoc(collection(db, 'expenses'), {
+    valor,
+    pagamento,
+    data
+  });
+
+  navigation.goBack();
 }
 
 const styles = {
