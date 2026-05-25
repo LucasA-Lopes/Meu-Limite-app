@@ -46,7 +46,10 @@ import {
   Text,
   Button,
   FlatList,
-  Dimensions
+  Dimensions,
+  TextInput,
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 
 import {
@@ -66,6 +69,12 @@ export default function Dashboard({ navigation }) {
   const [limite, setLimite] = useState(1000);
   const screenWidth =
   Dimensions.get('window').width;
+
+  const [editandoLimite, setEditandoLimite] =
+  useState(false);
+
+  const [novoLimite, setNovoLimite] =
+  useState('1000');
 
   async function carregarGastos() {
 
@@ -145,13 +154,71 @@ const total =
         Meu Limite
       </Text>
 
+      <View style={{
+  alignItems: 'center',
+  marginBottom: 10
+}}>
+
+  {!editandoLimite ? (
+
+    <>
       <Text style={{
         fontSize: 18,
-        marginBottom: 8,
         textAlign: 'center'
       }}>
         Teto: R$ {limite}
       </Text>
+
+      <TouchableOpacity
+        onPress={() =>
+          setEditandoLimite(true)
+        }
+      >
+        <Text style={{
+          color: 'blue',
+          marginTop: 4
+        }}>
+          Editar teto
+        </Text>
+      </TouchableOpacity>
+    </>
+
+  ) : (
+
+    <>
+      <TextInput
+        value={novoLimite}
+        onChangeText={setNovoLimite}
+        keyboardType="numeric"
+        placeholder="Novo teto"
+        style={{
+          borderWidth: 1,
+          width: 150,
+          padding: 8,
+          borderRadius: 8,
+          textAlign: 'center'
+        }}
+      />
+
+      <TouchableOpacity
+        onPress={() => {
+          setLimite(
+            parseFloat(novoLimite) || 0
+          );
+          setEditandoLimite(false);
+        }}
+      >
+        <Text style={{
+          color: 'green',
+          marginTop: 6
+        }}>
+          Salvar
+        </Text>
+      </TouchableOpacity>
+    </>
+  )}
+
+</View>
 
       <Text style={{
         fontSize: 18,

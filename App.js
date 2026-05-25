@@ -6,16 +6,19 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Dashboard from './src/screens/Dashboard';
 import AddExpense from './src/screens/AddExpense';
 import EditExpense from './src/screens/EditExpense';
+import Login from './src/screens/Login';
 
 const Stack = createNativeStackNavigator();
 
 export default function App(){
   return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Dashboard">
+        <Stack.Navigator initialRouteName="Login">
           <Stack.Screen name="Dashboard" component={Dashboard} />
           <Stack.Screen name="AddExpense" component={AddExpense} />
           <Stack.Screen name="EditExpense" component={EditExpense} />
+          <Stack.Screen name="Login" component={Login}
+/>
 
         </Stack.Navigator>
       </NavigationContainer>
