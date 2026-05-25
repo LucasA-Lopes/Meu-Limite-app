@@ -63,6 +63,7 @@ export default function Dashboard({ navigation }) {
 
 
   const [gastos, setGastos] = useState([]);     /*Guarda dos Dados*/
+  const [limite, setLimite] = useState(1000);
   const screenWidth =
   Dimensions.get('window').width;
 
@@ -107,22 +108,27 @@ export default function Dashboard({ navigation }) {
 
   gastos.forEach((item) => {
 
-    const valor =
-      parseFloat(item.valor) || 0;
+  const valor =
+    parseFloat(item.valor) || 0;
 
-    if(item.pagamento.toLowerCase() === 'crédito' ) {
-      credito += valor;
-    }
+  const pagamento =
+    (item.pagamento || '').toLowerCase();
 
-    else if(item.pagamento.toLowerCase() === 'débito') {
-      debito += valor;
-    }
+  if (pagamento === 'crédito') {
+    credito += valor;
+  }
 
-    else if(item.pagamento.toLowerCase() === 'pix') {
-      pix += valor;
-    }
+  else if (pagamento === 'débito') {
+    debito += valor;
+  }
 
-  });
+  else if (pagamento === 'pix') {
+    pix += valor;
+  }
+
+});
+const total =
+  credito + debito + pix;
 
   return (
 
@@ -133,12 +139,30 @@ export default function Dashboard({ navigation }) {
 
       <Text style={{
         fontSize:24,
-        marginBottom:20
+        marginBottom:20,
+        textAlign: 'center'
       }}>
         Meu Limite
       </Text>
 
+      <Text style={{
+        fontSize: 18,
+        marginBottom: 8,
+        textAlign: 'center'
+      }}>
+        Teto: R$ {limite}
+      </Text>
 
+      <Text style={{
+        fontSize: 18,
+        marginBottom: 15,
+        textAlign: 'center',
+        color: total > limite ? 'red' : 'green'
+      }}>
+        Total gasto: R$ {total}
+      </Text>
+      
+  
   <PieChart
     data={[
       {
