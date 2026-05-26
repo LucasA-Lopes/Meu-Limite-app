@@ -41,7 +41,7 @@ import React, {
   useState
 } from 'react';
 
-import {
+import {                       /*Importação dos Componentes*/
   View,
   Text,
   Button,
@@ -52,7 +52,7 @@ import {
   ScrollView
 } from 'react-native';
 
-import {
+import {                                            
   collection,
   getDocs
 } from 'firebase/firestore';
@@ -83,7 +83,7 @@ export default function Dashboard({ navigation }) {
         collection(db, 'expenses')
       );
 
-    const lista = [];
+    const lista = [];                                           /*Listagem dos Valores gastos */
 
     querySnapshot.forEach((doc) => {
 
@@ -141,10 +141,12 @@ const total =
 
   return (
 
-    <View style={{
-      flex:1,
+    <ScrollView
+      style={{ flex:1 }}
+      contentContainerStyle={{
       padding:20
-    }}>
+    }}
+  >
 
       <Text style={{
         fontSize:24,
@@ -155,9 +157,9 @@ const total =
       </Text>
 
       <View style={{
-  alignItems: 'center',
-  marginBottom: 10
-}}>
+        alignItems: 'center',
+         marginBottom: 10
+      }}>
 
   {!editandoLimite ? (
 
@@ -218,7 +220,7 @@ const total =
     </>
   )}
 
-</View>
+      </View>
 
       <Text style={{
         fontSize: 18,
@@ -235,7 +237,7 @@ const total =
       {
         name: 'Crédito',
         population: credito,
-        color: 'black',
+        color: '#F68625',
         legendFontColor: '#000',
         legendFontSize: 14
       },
@@ -243,7 +245,7 @@ const total =
       {
         name: 'Débito',
         population: debito,
-        color: 'blue',
+        color: '#8E8F70',
         legendFontColor: '#000',
         legendFontSize: 14
       },
@@ -251,7 +253,7 @@ const total =
       {
         name: 'Pix',
         population: pix,
-        color: 'purple',
+        color: '#39DFE3',
         legendFontColor: '#000',
         legendFontSize: 14
       }
@@ -296,7 +298,8 @@ const total =
         Lista de Gastos
       </Text>
 
-      <FlatList                                                           /*Mostrar os dados em forma de Lista*/
+      <FlatList     
+        scrollEnabled={false}                                                      /*Mostrar os dados em forma de Lista*/
         data={gastos}
 
         keyExtractor={(item) => item.id}
@@ -337,7 +340,7 @@ const total =
         )}
       />
 
-    </View>
+</ScrollView>
   );
 }
 
