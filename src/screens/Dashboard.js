@@ -54,10 +54,12 @@ import {                       /*Importação dos Componentes*/
 
 import {                                            
   collection,
-  getDocs
+  getDocs,
+  doc,
+  getDoc
 } from 'firebase/firestore';
 
-import { db } from '../firebase/firebaseConfig';
+import { auth, db } from '../firebase/firebaseConfig';
 
 import { PieChart }
 from 'react-native-chart-kit';
@@ -76,12 +78,33 @@ export default function Dashboard({ navigation }) {
   const [novoLimite, setNovoLimite] =
   useState('1000');
 
+  async function carregarLimite() {
+
+  const uid =
+    auth.currentUser.uid;
+
+  const docRef =
+    doc(db, 'users', uid);
+
+  const docSnap =
+    await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    setLimite(
+      docSnap.data().limite
+    );
+  }
+}
   async function carregarGastos() {
 
     const querySnapshot =
       await getDocs(                                            /*Busca dos Dados*/
-        collection(db, 'expenses')
-      );
+        collection(
+          db,
+          'users',
+          auth.currentUser.uid,
+          'expenses'
+      ));
 
     const lista = [];                                           /*Listagem dos Valores gastos */
 
@@ -100,14 +123,18 @@ export default function Dashboard({ navigation }) {
 
   useEffect(() => {
 
-    const unsubscribe =
-      navigation.addListener('focus', () => {
+  const unsubscribe =
+    navigation.addListener(
+      'focus',
+      () => {
 
+        carregarLimite();
         carregarGastos();
 
-      });
+      }
+    );
 
-    return unsubscribe;
+  return unsubscribe;
 
   }, [navigation]);
 

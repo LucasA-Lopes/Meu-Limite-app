@@ -1,124 +1,89 @@
-import React, { useState } from 'react';
+import React, {
+  useState
+} from 'react';
 
 import {
   View,
-  Text,
   TextInput,
   Button,
   Alert
 } from 'react-native';
 
 import {
-  collection,
-  getDocs,
-  addDoc
-} from 'firebase/firestore';
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
+} from 'firebase/auth';
 
-import { db }
-from '../firebase/firebaseConfig';
+import {
+  auth
+} from '../firebase/firebaseConfig';
 
 export default function Login({
   navigation
 }) {
-
-  const [usuario, setUsuario] =
+  const [email, setEmail] =
     useState('');
 
   const [senha, setSenha] =
     useState('');
 
-  async function fazerLogin() {
-
-    const querySnapshot =
-      await getDocs(
-        collection(db, 'usuarios')
+  async function criar() {
+    try {
+      await createUserWithEmailAndPassword(
+        auth,
+        email.trim(),
+        senha
       );
 
-    let encontrado = false;
-
-    querySnapshot.forEach((doc) => {
-
-      const dados =
-        doc.data();
-
-      if (
-        dados.usuario === usuario
-      ) {
-
-        encontrado = true;
-
-        if (
-          dados.senha === senha
-        ) {
-
-          navigation.navigate(
-            'Dashboard'
-          );
-
-        } else {
-
-          Alert.alert(
-            'Erro',
-            'Senha incorreta'
-          );
-
-        }
-
-      }
-
-    });
-
-    if (!encontrado) {
-
-      await addDoc(
-        collection(
-          db,
-          'usuarios'
-        ),
-        {
-          usuario,
-          senha
-        }
+      navigation.replace(
+        'Welcome'
       );
 
+    } catch (e) {
       Alert.alert(
-        'Sucesso',
-        'Usuário criado!'
+        'Erro',
+        e.message
+      );
+    }
+  }
+
+  async function entrar() {
+    try {
+      await signInWithEmailAndPassword(
+        auth,
+        email.trim(),
+        senha
       );
 
       navigation.navigate(
         'Dashboard'
       );
 
+    } catch (e) {
+      Alert.alert(
+        'Erro',
+        e.message
+      );
     }
-
   }
 
   return (
-
-    <View style={{
-      flex:1,
-      justifyContent:'center',
-      padding:20
-    }}>
-
-      <Text style={{
-        fontSize:28,
-        textAlign:'center',
-        marginBottom:30
-      }}>
-        Login
-      </Text>
-
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        padding: 20
+      }}
+    >
       <TextInput
-        placeholder="Usuário"
-        value={usuario}
-        onChangeText={setUsuario}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
         style={{
-          borderWidth:1,
-          padding:12,
-          marginBottom:15,
-          borderRadius:8
+          borderWidth: 1,
+          marginBottom: 10,
+          padding: 10
         }}
       />
 
@@ -126,20 +91,29 @@ export default function Login({
         placeholder="Senha"
         value={senha}
         onChangeText={setSenha}
-        secureTextEntry={true}
+        secureTextEntry
         style={{
-          borderWidth:1,
-          padding:12,
-          marginBottom:20,
-          borderRadius:8
+          borderWidth: 1,
+          marginBottom: 10,
+          padding: 10
         }}
       />
 
       <Button
-        title="Entrar / Criar usuário"
-        onPress={fazerLogin}
+        title="Entrar"
+        onPress={entrar}
       />
 
+      <View
+        style={{
+          height: 10
+        }}
+      />
+
+      <Button
+        title="Criar conta"
+        onPress={criar}
+      />
     </View>
   );
 }

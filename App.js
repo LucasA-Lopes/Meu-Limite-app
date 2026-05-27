@@ -7,22 +7,51 @@ import Dashboard from './src/screens/Dashboard';
 import AddExpense from './src/screens/AddExpense';
 import EditExpense from './src/screens/EditExpense';
 import Login from './src/screens/Login';
+import Welcome from './src/screens/Welcome';
 
 const Stack = createNativeStackNavigator();
 
-export default function App(){
+export default function App() {
   return (
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen name="Dashboard" component={Dashboard} />
-          <Stack.Screen name="AddExpense" component={AddExpense} />
-          <Stack.Screen name="EditExpense" component={EditExpense} />
-          <Stack.Screen name="Login" component={Login}
-/>
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Login"
+      >
 
-        </Stack.Navigator>
-      </NavigationContainer>
-  )
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{
+            headerShown: false
+          }}
+        />
+
+        <Stack.Screen
+          name="Dashboard"
+          component={Dashboard}
+        />
+
+        <Stack.Screen
+          name="AddExpense"
+          component={AddExpense}
+        />
+
+        <Stack.Screen
+          name="EditExpense"
+          component={EditExpense}
+        />
+
+        <Stack.Screen
+          name="Welcome"
+          component={Welcome}
+          options={{
+            headerShown: false
+          }}
+        />
+
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
 
 /*export default function App(){

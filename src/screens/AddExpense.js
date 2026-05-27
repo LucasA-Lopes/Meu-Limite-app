@@ -1,47 +1,82 @@
-import React, { useState } from 'react';
-import { View, Text, Button, TextInput } from 'react-native';
+import React, {
+  useState
+} from 'react';
 
-import { collection, addDoc } from 'firebase/firestore';
+import {
+  View,
+  Text,
+  Button,
+  TextInput
+} from 'react-native';
 
-import { db } from '../firebase/firebaseConfig';
+import {
+  collection,
+  addDoc
+} from 'firebase/firestore';
 
-export default function AddExpense({ navigation }) {
+import {
+  auth,
+  db
+} from '../firebase/firebaseConfig';
 
-  const [valor, setValor] = useState('');
-  const [pagamento, setPagamento] = useState('');
-  const [data, setData] = useState('');
+export default function AddExpense({
+  navigation
+}) {
+  const [valor, setValor] =
+    useState('');
+
+  const [pagamento, setPagamento] =
+    useState('');
+
+  const [data, setData] =
+    useState('');
 
   async function salvarGasto() {
-
     try {
+      const uid =
+        auth.currentUser.uid;
 
-      await addDoc(collection(db, 'expenses'), {
-        valor,
-        pagamento,
-        data
-      });
+      await addDoc(
+        collection(
+          db,
+          'users',
+          uid,
+          'expenses'
+        ),
+        {
+          valor,
+          pagamento,
+          data
+        }
+      );
 
-      console.log('Salvo com sucesso');
+      console.log(
+        'Salvo com sucesso'
+      );
 
       navigation.goBack();
 
     } catch (error) {
-
       console.log(error);
-
     }
-
   }
 
-
   return (
-    <View style={{
-      flex:1,
-      justifyContent:"center",
-      alignItems:"center"
-    }}>
-
-      <Text style={{fontSize:20, marginBottom:20}}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent:
+          'center',
+        alignItems:
+          'center'
+      }}
+    >
+      <Text
+        style={{
+          fontSize: 20,
+          marginBottom: 20
+        }}
+      >
         Adicionar Gasto
       </Text>
 
@@ -49,57 +84,59 @@ export default function AddExpense({ navigation }) {
         style={styles.input}
         placeholder="Digite o valor"
         value={valor}
-        onChangeText={setValor}
+        onChangeText={
+          setValor
+        }
       />
 
       <TextInput
         style={styles.input}
         placeholder="Crédito / Débito / Pix"
         value={pagamento}
-        onChangeText={setPagamento}
+        onChangeText={
+          setPagamento
+        }
       />
 
       <TextInput
         style={styles.input}
         placeholder="Data"
         value={data}
-        onChangeText={setData}
+        onChangeText={
+          setData
+        }
       />
 
       <Button
         title="Salvar"
-        onPress={salvarGasto}
+        onPress={
+          salvarGasto
+        }
       />
-      
-      <View style={{marginTop:20}}>
+
+      <View
+        style={{
+          marginTop: 20
+        }}
+      >
         <Button
           title="Voltar"
-          onPress={() => navigation.goBack()}
+          onPress={() =>
+            navigation.goBack()
+          }
         />
       </View>
-
     </View>
   );
 }
 
-async function salvarGasto() {
-
-  await addDoc(collection(db, 'expenses'), {
-    valor,
-    pagamento,
-    data
-  });
-
-  navigation.goBack();
-}
-
 const styles = {
   input: {
-    borderWidth:1,
-    width:250,
-    padding:10,
-    marginBottom:15,
-    borderRadius:8
+    borderWidth: 1,
+    width: 250,
+    padding: 10,
+    marginBottom: 15,
+    borderRadius: 8
   }
 };
  /*export function AddExpense1({navigation}){
